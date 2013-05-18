@@ -37,8 +37,9 @@ soccer_pitch = STRUCT([pitch,bottom_side,Rotate_AND_Translate([0,1],[PI])([0,1],
 
 //soccer goals pole: circular section 0,12m; height: 2,45m cross: widht 7,30m
 var domain_circular = DOMAIN([[0,2*PI],[0,1]])([32,32]);
+var domain_c = DOMAIN([[0,2*PI]])([32]);
 
-var circle = function (r,h,angolo) {
+/*var circle = function (r,h,angolo) {
   return function (v) {
     var c = [r*COS(v[0]), r*SIN(v[0]),h];
     if(angolo == 0)
@@ -47,6 +48,30 @@ var circle = function (r,h,angolo) {
     return [c[0],c[1],c[0]*SIN(angolo)+c[2]*COS(angolo)];
   };
 };
+*/
+var circle = function (r,h,angolo) {
+  return function (v) {
+    var c = [r*COS(v[0]), r*SIN(v[0]),h];
+    if(angolo == 0)
+    	return c;
+    else{
+    	var x = COS(angolo)*c[0]+SIN(angolo)*c[2];
+    	var z = -SIN(angolo)*c[0]+COS(angolo)*c[2];
+    return [c[0],c[1],z];
+  }};
+};
+
+var circle_translate = function (r,h,angolo, translatex) {
+  return function (v) {
+    var c = [r*COS(v[0]), r*SIN(v[0]),h];
+    if(angolo == 0)
+    	return [c[0]+translatex,c[1],c[2]];
+    else
+    return [c[0]+translatex,c[1],-c[0]*SIN(angolo)+c[2]*COS(angolo)];
+  };
+};
+
+
 
 var INTER_C2C = function(sel){
 	return function(args){ //array di punti
@@ -70,9 +95,19 @@ var INTER_C2C = function(sel){
 
 var pole1 = circle(0.12,0.201,0);
 
-var pole2 = circle(0.12, 2.651,-PI/6); // pole1+2.45 on z-axis
+var pole2 = circle(0.12, 2.651,PI/4); // pole1+2.45 on z-axis and rotate of -30 degrees on they-axis
+
+var pole3 = circle_translate(0.12, 2.651,-PI/4,7.12); 
+
+var pole4 = circle_translate(0.12, 0.201,0,7.12);
 
 var pole_left = MAP(INTER_C2C(S1)([pole1,pole2]))(domain_circular);
 
-DRAW(pole_left);
+var cross =  MAP(BEZIER(S1)([pole2,pole3]))(domain_circular);
+
+var pole_right = MAP(INTER_C2C(S1)([pole3,pole4]))(domain_circular)
+
+var soccer_goals = STRUCT([pole_left,cross,pole_right]);
+
+DRAW(soccer_goals);
 //DRAW(soccer_pitch);
