@@ -4,7 +4,7 @@ var domain2 = DOMAIN([[0,1],[0,1]])([32,32]);
 var green = [34/255,	139/255,	34/255];
 var white = [255/255,	255/255,	255/255];
 
-var pitch = COLOR(green)(CUBOID([111,72,0.2]));
+var pitch = T([2])([-0.201])(COLOR(green)(CUBOID([111,72,0.2])));
 
 //rotate object and then translate resulted-oject
 var Rotate_AND_Translate = function(axis,rotates){
@@ -19,13 +19,13 @@ var Rotate_AND_Translate = function(axis,rotates){
 //bottom and side lines 105 X 68
 // weight line 0.5 distance border and border-line x:2.5 y:1.5
 
-var bottom_line = BEZIER(S0)([[2.5,1.5,0.201],[2.5,70.5,0.201]]);
+var bottom_line = BEZIER(S0)([[2.5,1.5,0],[2.5,70.5,0]]);
 
-var bottom_line1 = BEZIER(S0)([[3,2,0.201],[3,70,0.201]]);
+var bottom_line1 = BEZIER(S0)([[3,2,0],[3,70,0]]);
 
-var side_line = BEZIER(S0)([[2.5,1.5,0.201],[108.5,1.5,0.201]]);
+var side_line = BEZIER(S0)([[2.5,1.5,0],[108.5,1.5,0]]);
 
-var side_line1 = BEZIER(S0)([[3,2,0.201],[108,2,0.201]]);
+var side_line1 = BEZIER(S0)([[3,2,0],[108,2,0]]);
 
 var bottom = BEZIER(S1)([bottom_line,bottom_line1]);
 
@@ -74,5 +74,12 @@ var pole2 = circle(0.12, 2.651,-PI/6); // pole1+2.45 on z-axis
 
 var pole_left = MAP(INTER_C2C(S1)([pole1,pole2]))(domain_circular);
 
-DRAW(pole_left);
-//DRAW(soccer_pitch);
+//DRAW(pole_left);
+DRAW(soccer_pitch);
+
+var leftpole = CYL_SURFACE([0.06,2.44])([12]);
+var rightpole = T([1])([7.08])(leftpole)
+var crossbeam = T([2])([2.44-0.06])(R([1,2])(-PI/2)(CYL_SURFACE([0.06,7.32])([12])))
+
+goal1 = T([0,1])([2.5,0.5+1.5+68/2])(STRUCT([leftpole,rightpole,crossbeam]))
+goal2 = T([1])([0.5+105+0.5])(goal1)
