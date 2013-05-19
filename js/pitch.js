@@ -9,7 +9,12 @@ var darkgreen = [34/255,	139/255,	34/255];
 var lightgreen = [50/255,	205/255,	50/255];
 var white = [255/255,	255/255,	255/255];
 
+//pitch x start -4.5 to 115.5 y from -5.5 to 77.5 and z -0.01
+
 var c = CUBOID([5.55,72,0.2]);
+var terreno_calpestabile1 = SIMPLEX_GRID([[4.5,-111,4.5],[83],[0.2]]);
+var terreno_calpestabile2 = SIMPLEX_GRID([[-4.5,111,-4.5],[5.5,-72,5.5],[0.2]]);
+var terreno_calpestabile = STRUCT([terreno_calpestabile1,terreno_calpestabile2]);
 var pitch = T([2])([-0.201])(STRUCT(REPLICA(10)([COLOR(darkgreen)(c),T([0])([5.55]),COLOR(lightgreen)(c),T([0])([5.55])])));
 
 //bottom and side lines 105 X 68
@@ -68,7 +73,7 @@ var areas = STRUCT([area0,area1]);
 var stripes = COLOR(white)(STRUCT([areas,center_disk,center,bottom_side,Rotate_AND_Translate([0,1],[PI])([0,1],[111,72])(bottom_side),
 								   T([0,1])([2.5+0.5+105/2, 1.5+0.5+68/2-0.25])(middle_circulus),bezel_corner]));
 
-var soccer_pitch = STRUCT([pitch,stripes]);
+var soccer_pitch = STRUCT([pitch,stripes,COLOR([16/255,78/255,139/255])(T([0,1,2])([-4.5,-5.5,-0.201])(terreno_calpestabile))]);
 
 //soccer goals pole: circular section 0,12m; height: 2,45m; crossbeam length: 7m;
 

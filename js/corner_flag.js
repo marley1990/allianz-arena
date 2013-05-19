@@ -19,5 +19,9 @@ var corner = COLOR(black)(STRUCT([cyl,disk]));
 
 var corner_flag = STRUCT([corner,flag]);
 
-var corner_on_pitch = STRUCT([T([0,1])([2.7,1.7])(corner_flag),T([0,1])([108.1,1.7])(corner_flag),
-							  T([0,1])([2.7,70.2])(corner_flag),T([0,1])([108.1,70.2])(corner_flag)]);
+var corner_on_pitch = STRUCT([T([0,1])([2.5-0,1.5-0.05])(corner_flag),T([0,1])([108.55,1.45])(corner_flag),
+							  T([0,1])([2.45,70.55])(corner_flag),T([0,1])([108.55,70.55])(corner_flag)]);
+
+
+/////cartelloni publicitari
+
