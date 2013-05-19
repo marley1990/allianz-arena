@@ -21,12 +21,12 @@ var bottom_line = BEZIER(S0)([[2.5,1.5,0],[2.5,70.5,0]]);
 
 var bottom_line1 = BEZIER(S0)([[3,2,0],[3,70,0]]);
 
-var center_line = BEZIER(S0)([[2.5+52.5,1.5,0],[2.5+52.5,1.5+0.5+68,0]])
+var center_line = BEZIER(S0)([[3+52.25,1.5,0],[3+52.25,1.5+0.5+68,0]])
 
-var center_line1 = BEZIER(S0)([[2.5+52.5+0.5,1.5,0],[2.5+52.5+0.5,1.5+0.5+68,0]])
+var center_line1 = BEZIER(S0)([[3+52.5+0.25,1.5,0],[3+52.5+0.25,1.5+0.5+68,0]])
 
 var center = MAP(BEZIER(S1)([center_line,center_line1]))(domain2);
-var center_disk = T([0,1])([2.5+0.5+105/2-0.25,1.5+0.5+68/2-0.25])(DISK(0.8)(12));
+var center_disk = T([0,1])([2.5+0.5+105/2,1.5+0.5+68/2-0.25])(DISK(0.8)(12));
 
 var side_line = BEZIER(S0)([[2.5,1.5,0],[108.5,1.5,0]]);
 
@@ -37,6 +37,8 @@ var bottom = BEZIER(S1)([bottom_line,bottom_line1]);
 var side = BEZIER(S1)([side_line,side_line1]);
 
 var bottom_side = STRUCT([MAP(bottom)(domain2),MAP(side)(domain2)]);
+
+var middle_circulus = annulus_sector(2*PI,9.15,9.65);
 
 //areas
 
@@ -55,7 +57,8 @@ var area0 = T([0,1])([2.5+0.5,1.5+0.5+68/2-10.5-18.3/2])(STRUCT([small_area,big_
 var area1 = T([0,1])([105+16.5/2-2.5+0.5,1.5+0.5+34+40.3-3.85])(R([0,1])([-PI])(area0));
 var areas = STRUCT([area0,area1]);
 
-var stripes = COLOR(white)(STRUCT([areas,center_disk,center,bottom_side,Rotate_AND_Translate([0,1],[PI])([0,1],[111,72])(bottom_side)]));
+var stripes = COLOR(white)(STRUCT([areas,center_disk,center,bottom_side,Rotate_AND_Translate([0,1],[PI])([0,1],[111,72])(bottom_side),
+								   T([0,1])([2.5+0.5+105/2, 1.5+0.5+68/2-0.25])(middle_circulus)]));
 
 var soccer_pitch = STRUCT([pitch,stripes]);
 
