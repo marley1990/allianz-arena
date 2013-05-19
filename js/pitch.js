@@ -1,4 +1,3 @@
-
 //import support-function.js
 
 var domain1 = DOMAIN([[0,1]])([32]);
@@ -27,6 +26,7 @@ var center_line = BEZIER(S0)([[2.5+52.5,1.5,0],[2.5+52.5,1.5+0.5+68,0]])
 var center_line1 = BEZIER(S0)([[2.5+52.5+0.5,1.5,0],[2.5+52.5+0.5,1.5+0.5+68,0]])
 
 var center = MAP(BEZIER(S1)([center_line,center_line1]))(domain2);
+var center_disk = T([0,1])([2.5+0.5+105/2-0.25,1.5+0.5+68/2-0.25])(DISK(0.8)(12));
 
 var side_line = BEZIER(S0)([[2.5,1.5,0],[108.5,1.5,0]]);
 
@@ -38,7 +38,24 @@ var side = BEZIER(S1)([side_line,side_line1]);
 
 var bottom_side = STRUCT([MAP(bottom)(domain2),MAP(side)(domain2)]);
 
-var stripes = COLOR(white)(STRUCT([center,bottom_side,Rotate_AND_Translate([0,1],[PI])([0,1],[111,72])(bottom_side)]));
+//areas
+
+var big_area0 = CUBOID([16.5,0.5]);
+var big_area1 = T([0])([16.5-0.5])(CUBOID([0.5,40.3]));
+var big_area = STRUCT([big_area0,big_area1,T([1])([40.3-0.5])(big_area0)]);
+
+var small_area0 = CUBOID([5.5,0.5]);
+var small_area1 = T([0])([5.5-0.5])(CUBOID([0.5,18.3]));
+var small_area = T([1])([0.5+10.5])(STRUCT([small_area0,small_area1,T([1])([18.3-0.5])(small_area0)]));
+
+var penalty_disk = T([0,1])([11,0.5+10.5+18.3/2-0.4])(DISK(0.8)(12));
+
+var area0 = T([0,1])([2.5+0.5,1.5+0.5+68/2-10.5-18.3/2])(STRUCT([small_area,big_area,penalty_disk]));
+
+var area1 = T([0,1])([105+16.5/2-2.5+0.5,1.5+0.5+34+40.3-3.85])(R([0,1])([-PI])(area0));
+var areas = STRUCT([area0,area1]);
+
+var stripes = COLOR(white)(STRUCT([areas,center_disk,center,bottom_side,Rotate_AND_Translate([0,1],[PI])([0,1],[111,72])(bottom_side)]));
 
 var soccer_pitch = STRUCT([pitch,stripes]);
 
@@ -58,11 +75,11 @@ var crossbeam =  MAP(INTER_C2C(S1)([pole2,pole3]))(domain2);
 
 var pole_right = MAP(INTER_C2C(S1)([pole3,pole4]))(domain2)
 
-// net(rete)
+// net ( = rete )
 
 var net_points = [[0,0,0],[0.06,0,0.33],[0.12,0,0.6627],[0.265,0,1.3255],[0.3,0,1.5],
-                                 [0.40,0,2],[0.5,0,2.5],[0.51,0,2.51],[0.52,0,2.52],[0.55,0,2.55],
-                                 [0.6,0,2.6],[0.63,0,2.63],[1,0,2.651],[2,0,2.651]]; //ok
+					[0.40,0,2],[0.5,0,2.5],[0.51,0,2.51],[0.52,0,2.52],[0.55,0,2.55],
+					[0.6,0,2.6],[0.63,0,2.63],[1,0,2.651],[2,0,2.651]];
 
 var net_curve0 = genNUBS(net_points)[1];
 
@@ -81,8 +98,8 @@ var net = STRUCT([net0,net1,net2]);
 var support0 = CYLINDER(0.05,2.8)(12);
 var supports = STRUCT([T([1])([2.5]),support0,T([0])([6.9]),support0]);
 
-var soccer_goal0 = T([0,1])([2.5+0.5,1.5+0.5+34])(R([0,1])([PI/2])(STRUCT([pole_left,crossbeam,pole_right, net, supports])));
-var soccer_goal1 = T([0,1])([105+2.5+0.5,1.5+0.5+34])(R([0,1])([-PI/2])(STRUCT([pole_left,crossbeam,pole_right, net, supports])));
+var soccer_goal0 = T([0,1])([2.5+0.5,1.5+0.5+34-6.9/2])(R([0,1])([PI/2])(STRUCT([pole_left,crossbeam,pole_right, net, supports])));
+var soccer_goal1 = T([0,1])([105+2.5+0.5,1.5+0.5+34+3])(R([0,1])([-PI/2])(STRUCT([pole_left,crossbeam,pole_right, net, supports])));
 var soccer_goals = STRUCT([soccer_goal0,soccer_goal1]);
 
 var all = STRUCT([soccer_goals,soccer_pitch]);
