@@ -135,3 +135,22 @@ function genNUBS (controlPoints){
   var curve = MAP(nubs)(domain)
   return [curve,nubs]
 }
+
+var CYLINDER = function(r,h){
+  function C0(l){
+  var s = CYL_SURFACE([r,h])(l);
+  var b1 = DISK(r)(l);
+  var b2 = T([2])([h])(b1);
+  return STRUCT([s,b1,b2]);
+  }
+  return C0;
+}
+
+//rotate object and then translate resulted-oject
+var Rotate_AND_Translate = function(axis,rotates){
+  return function(axis, translate){
+    return function(object){
+      return T(axis)(translate)(R(axis)(rotates)(object));
+    }
+  }
+}
