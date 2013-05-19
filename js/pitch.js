@@ -1,5 +1,3 @@
-//import support-function.js
-
 var domain1 = DOMAIN([[0,1]])([32]);
 var domain2 = DOMAIN([[0,1],[0,1]])([32,32]);
 
@@ -40,6 +38,16 @@ var bottom_side = STRUCT([MAP(bottom)(domain2),MAP(side)(domain2)]);
 
 var middle_circulus = annulus_sector(2*PI,9.15,9.65);
 
+var bezel_corner_left_down = T([0,1])([3,2])(annulus_sector(PI/2,1,1.5));
+
+var bezel_corner_right_down = T([0,1])([110,-1])(R([0,1])([PI/2])(bezel_corner_left_down));
+ 
+var bezel_corner_down = STRUCT([bezel_corner_left_down,bezel_corner_right_down]);
+
+var bezel_corner_up = T([0,1])([111,72])(R([0,1])([PI])(bezel_corner_down));
+
+var bezel_corner = STRUCT([bezel_corner_down,bezel_corner_up]);
+
 //areas
 
 var big_area0 = CUBOID([16.5,0.5]);
@@ -58,7 +66,7 @@ var area1 = T([0,1])([105+16.5/2-2.5+0.5,1.5+0.5+34+40.3-3.85])(R([0,1])([-PI])(
 var areas = STRUCT([area0,area1]);
 
 var stripes = COLOR(white)(STRUCT([areas,center_disk,center,bottom_side,Rotate_AND_Translate([0,1],[PI])([0,1],[111,72])(bottom_side),
-								   T([0,1])([2.5+0.5+105/2, 1.5+0.5+68/2-0.25])(middle_circulus)]));
+								   T([0,1])([2.5+0.5+105/2, 1.5+0.5+68/2-0.25])(middle_circulus),bezel_corner]));
 
 var soccer_pitch = STRUCT([pitch,stripes]);
 
@@ -77,6 +85,7 @@ var pole_left = MAP(INTER_C2C(S1)([pole1,pole2]))(domain2);
 var crossbeam =  MAP(INTER_C2C(S1)([pole2,pole3]))(domain2);
 
 var pole_right = MAP(INTER_C2C(S1)([pole3,pole4]))(domain2)
+
 
 // net ( = rete )
 
@@ -105,7 +114,7 @@ var soccer_goal0 = T([0,1])([2.5+0.5,1.5+0.5+34-6.9/2])(R([0,1])([PI/2])(STRUCT(
 var soccer_goal1 = T([0,1])([105+2.5+0.5,1.5+0.5+34+3])(R([0,1])([-PI/2])(STRUCT([pole_left,crossbeam,pole_right, net, supports])));
 var soccer_goals = STRUCT([soccer_goal0,soccer_goal1]);
 
-var all = STRUCT([soccer_goals,soccer_pitch]);
+var all = STRUCT([soccer_goals,soccer_pitch, corner_on_pitch]);
 
 DRAW(all);
 
