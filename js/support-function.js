@@ -166,3 +166,12 @@ function annulus_sector (alpha, r, R) {
   var model = MAP(mapping)(domain);
   return model;
 }
+
+var stairGen = function(h,l,n,d,w){
+  var height = h/n;
+  var sup_length = l/n + d;
+  var profile = SIMPLICIAL_COMPLEX([[0,0],[d,0],[0,height],[d,height],[sup_length,height]])([[0,1,2],[1,2,3],[1,3,4]]);
+  var step = EXTRUDE([w])(profile);
+  var stairs = STRUCT(REPLICA(n-1)([step,T([0,1])([l/n,height])]));
+  return stairs;
+}
